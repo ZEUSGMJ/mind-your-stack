@@ -1,0 +1,37 @@
+# Nextcloud - Single Container (Isolation Baseline)
+# Runs Nextcloud alone with SQLite (no PostgreSQL, no Redis).
+# Compare against nextcloud/ (full stack) to test orchestration gap.
+#
+# Expected behavior: Nextcloud may partially boot but crash or run
+# in degraded mode without the database. Any traffic here represents
+# the bare minimum the image produces on its own.
+
+services:
+  nextcloud:
+    image: nextcloud:latest
+    container_name: mys-nextcloud-solo
+    restart: "no"
+    environment:
+      - SQLITE_DATABASE=nextcloud
+      - NEXTCLOUD_ADMIN_USER=admin
+      - NEXTCLOUD_ADMIN_PASSWORD=admin_research_pw
+      - NEXTCLOUD_TRUSTED_DOMAINS=localhost 10.0.0.222
+    volumes:
+      - nextcloud-solo-data:/var/www/html
+    ports:
+      - "18080:80"
+    dns:
+      - 172.30.0.2
+    networks:
+      - internal
+      - research-infra
+
+networks:
+  internal:
+    driver: bridge
+  research-infra:
+    external: true
+    name: mys-research-infra
+
+volumes:
+  nextcloud-solo-data:

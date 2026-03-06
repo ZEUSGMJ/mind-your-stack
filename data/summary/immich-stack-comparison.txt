@@ -1,0 +1,46 @@
+════════════════════════════════════════════════════════════════
+COMPARISON: immich-solo-20260218_231132 vs immich-20260219_001706
+════════════════════════════════════════════════════════════════
+
+--- DNS Domains ---
+
+Only in immich-solo-20260218_231132:
+  6.b.c.3.1.1.e.f.f.f.e.0.d.7.0.9.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa,olympus.local
+  OLYMPUS._device-info._tcp.local,olympus.local,6.b.c.3.1.1.e.f.f.f.e.0.d.7.0.9.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa,OLYMPUS._smb._tcp.local
+
+Only in immich-20260219_001706:
+  2.e.e.f.6.e.e.f.f.f.a.b.5.4.c.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa,olympus.local
+  OLYMPUS._device-info._tcp.local,olympus.local,2.e.e.f.6.e.e.f.f.f.a.b.5.4.c.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa,OLYMPUS._smb._tcp.local
+
+In both:
+  _ipps._tcp.local,_ipp._tcp.local
+
+--- TLS SNI ---
+
+Only in immich-solo-20260218_231132:
+  
+
+Only in immich-20260219_001706:
+  api.github.com
+
+In both:
+
+--- Outbound IPs (non-RFC1918) ---
+
+Only in immich-solo-20260218_231132:
+
+Only in immich-20260219_001706:
+  140.82.116.6
+
+In both:
+  224.0.0.251
+
+--- Per-Phase Packet Counts ---
+
+Phase           immich-solo-20260218_231132 immich-20260219_001706
+-----           ------     ------    
+boot            26         17819     
+idle            0          88495     
+interaction     0          6531      
+
+Comparison complete.

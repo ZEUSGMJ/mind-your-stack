@@ -1,0 +1,50 @@
+════════════════════════════════════════════════════════════════
+COMPARISON: n8n-queue-20260218_220252 vs n8n-queue-optout-partial-20260219_034437
+════════════════════════════════════════════════════════════════
+
+--- DNS Domains ---
+
+Only in n8n-queue-20260218_220252:
+  f.a.1.d.e.8.e.f.f.f.8.8.7.5.4.e.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa,olympus.local
+  OLYMPUS._device-info._tcp.local,olympus.local,f.a.1.d.e.8.e.f.f.f.8.8.7.5.4.e.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa,OLYMPUS._smb._tcp.local
+
+Only in n8n-queue-optout-partial-20260219_034437:
+  6.b.c.1.9.6.e.f.f.f.b.9.5.4.c.7.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa,olympus.local
+  OLYMPUS._device-info._tcp.local,olympus.local,6.b.c.1.9.6.e.f.f.f.b.9.5.4.c.7.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa,OLYMPUS._smb._tcp.local
+
+In both:
+  _ipps._tcp.local,_ipp._tcp.local
+
+--- TLS SNI ---
+
+Only in n8n-queue-20260218_220252:
+  telemetry.n8n.io
+  us.i.posthog.com
+
+Only in n8n-queue-optout-partial-20260219_034437:
+  
+
+In both:
+
+--- Outbound IPs (non-RFC1918) ---
+
+Only in n8n-queue-20260218_220252:
+  107.23.2.173
+  172.67.68.102
+  52.5.19.212
+  54.88.98.252
+
+Only in n8n-queue-optout-partial-20260219_034437:
+
+In both:
+  224.0.0.251
+
+--- Per-Phase Packet Counts ---
+
+Phase           n8n-queue-20260218_220252 n8n-queue-optout-partial-20260219_034437
+-----           ------     ------    
+boot            6544       6403      
+idle            27144      27064     
+interaction     2386       2376      
+
+Comparison complete.

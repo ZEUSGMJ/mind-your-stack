@@ -1,0 +1,28 @@
+# Instrumentation layer for Mind Your Stack research testbed.
+# This runs CoreDNS as a local DNS logger.
+# All experiment stacks point their DNS here.
+
+services:
+  coredns:
+    image: coredns/coredns:latest
+    container_name: mys-coredns
+    restart: unless-stopped
+    volumes:
+      - ./coredns/Corefile:/etc/coredns/Corefile:ro
+      - coredns-logs:/var/log/coredns
+    command: -conf /etc/coredns/Corefile
+    networks:
+      research-infra:
+        ipv4_address: 172.30.0.2
+
+networks:
+  research-infra:
+    name: mys-research-infra
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/16
+          gateway: 172.30.0.1
+
+volumes:
+  coredns-logs:

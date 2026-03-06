@@ -1,0 +1,110 @@
+# Nextcloud - Full Stack (Standard Docker Compose)
+#
+# NOTE: Using standard compose instead of AIO because AIO auto-spawns
+# its own containers which we cannot instrument with DNS overrides.
+# For the research, we need control over every service's DNS config.
+#
+# Stack: Nextcloud + PostgreSQL + Redis
+# This is the vendor-recommended production setup.
+
+services:
+  nextcloud:
+    image: nextcloud:latest
+    container_name: mys-nextcloud-app
+    restart: "no"
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+      - POSTGRES_PASSWORD=nextcloud_research_pw
+      - REDIS_HOST=redis
+      - NEXTCLOUD_ADMIN_USER=admin
+      - NEXTCLOUD_ADMIN_PASSWORD=admin_research_pw
+      - NEXTCLOUD_TRUSTED_DOMAINS=localhost 10.0.0.222
+    volumes:
+      - nextcloud-data:/var/www/html
+    ports:
+      - "18080:80"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    dns:
+      - 172.30.0.2
+    networks:
+      - internal
+      - research-infra
+
+  db:
+    image: postgres:16-alpine
+    container_name: mys-nextcloud-db
+    restart: "no"
+    environment:
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+      - POSTGRES_PASSWORD=nextcloud_research_pw
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nextcloud"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    dns:
+      - 172.30.0.2
+    networks:
+      - internal
+      - research-infra
+
+  redis:
+    image: redis:7-alpine
+    container_name: mys-nextcloud-redis
+    restart: "no"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    dns:
+      - 172.30.0.2
+    networks:
+      - internal
+      - research-infra
+
+  # Cron job container (runs Nextcloud background tasks)
+  # This is part of the official recommended setup.
+  cron:
+    image: nextcloud:latest
+    container_name: mys-nextcloud-cron
+    restart: "no"
+    entrypoint: /cron.sh
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+      - POSTGRES_PASSWORD=nextcloud_research_pw
+      - REDIS_HOST=redis
+    volumes:
+      - nextcloud-data:/var/www/html
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    dns:
+      - 172.30.0.2
+    networks:
+      - internal
+      - research-infra
+
+networks:
+  internal:
+    driver: bridge
+  research-infra:
+    external: true
+    name: mys-research-infra
+
+volumes:
+  nextcloud-data:
+  db-data:

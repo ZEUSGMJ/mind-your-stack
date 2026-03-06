@@ -1,0 +1,36 @@
+# n8n - Single Container Mode (Baseline)
+# This runs n8n as a single process with SQLite. No Redis, no workers.
+# Compare against n8n-queue/ to test the orchestration gap hypothesis.
+
+services:
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: mys-n8n-single
+    restart: "no"
+    environment:
+      - N8N_HOST=0.0.0.0
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - WEBHOOK_URL=http://localhost:5678/
+      # Use SQLite (default, no external DB needed)
+      - DB_TYPE=sqlite
+      - N8N_SECURE_COOKIE=false
+    volumes:
+      - n8n-single-data:/home/node/.n8n
+    ports:
+      - "5678:5678"
+    dns:
+      - 172.30.0.2
+    networks:
+      - internal
+      - research-infra
+
+networks:
+  internal:
+    driver: bridge
+  research-infra:
+    external: true
+    name: mys-research-infra
+
+volumes:
+  n8n-single-data:

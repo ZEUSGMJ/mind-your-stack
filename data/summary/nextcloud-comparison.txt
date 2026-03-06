@@ -1,0 +1,59 @@
+════════════════════════════════════════════════════════════════
+COMPARISON: nextcloud-solo-20260215_100115 vs nextcloud-20260215_110801
+════════════════════════════════════════════════════════════════
+
+--- DNS Domains ---
+
+Only in nextcloud-solo-20260215_100115:
+  9.c.2.4.b.c.e.f.f.f.0.d.d.6.8.7.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa,olympus.local
+  OLYMPUS._device-info._tcp.local,olympus.local,9.c.2.4.b.c.e.f.f.f.0.d.d.6.8.7.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa,OLYMPUS._smb._tcp.local
+
+Only in nextcloud-20260215_110801:
+  3.7.2.5.e.3.e.f.f.f.2.d.1.1.4.b.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa,olympus.local
+  OLYMPUS._device-info._tcp.local,olympus.local,3.7.2.5.e.3.e.f.f.f.2.d.1.1.4.b.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa,OLYMPUS._smb._tcp.local
+
+In both:
+  _ipps._tcp.local,_ipp._tcp.local
+
+--- TLS SNI ---
+
+Only in nextcloud-solo-20260215_100115:
+
+Only in nextcloud-20260215_110801:
+  garm2.nextcloud.com
+  pushfeed.nextcloud.com
+
+In both:
+  apps.nextcloud.com
+  github.com
+  nextcloud.com
+  raw.githubusercontent.com
+  updates.nextcloud.com
+  www.nextcloud.com
+
+--- Outbound IPs (non-RFC1918) ---
+
+Only in nextcloud-solo-20260215_100115:
+  140.82.116.4
+  185.199.110.133
+
+Only in nextcloud-20260215_110801:
+  140.82.116.3
+  185.199.109.133
+  65.109.114.179
+
+In both:
+  224.0.0.251
+  5.9.202.145
+  65.21.231.50
+  85.10.195.17
+
+--- Per-Phase Packet Counts ---
+
+Phase           nextcloud-solo-20260215_100115 nextcloud-20260215_110801
+-----           ------     ------    
+boot            44         53245     
+idle            18         9420      
+interaction     6576       26796     
+
+Comparison complete.

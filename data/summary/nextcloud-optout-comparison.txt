@@ -1,0 +1,61 @@
+════════════════════════════════════════════════════════════════
+COMPARISON: nextcloud-20260219_023519 vs nextcloud-optout-20260219_060158
+════════════════════════════════════════════════════════════════
+
+--- DNS Domains ---
+
+Only in nextcloud-20260219_023519:
+  b.a.e.3.3.8.e.f.f.f.0.9.2.a.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa,olympus.local
+  OLYMPUS._device-info._tcp.local,olympus.local,b.a.e.3.3.8.e.f.f.f.0.9.2.a.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa,OLYMPUS._smb._tcp.local
+
+Only in nextcloud-optout-20260219_060158:
+  9.4.8.d.6.b.e.f.f.f.c.3.5.b.c.a.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa,olympus.local
+  OLYMPUS._device-info._tcp.local,olympus.local,9.4.8.d.6.b.e.f.f.f.c.3.5.b.c.a.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa,OLYMPUS._smb._tcp.local
+
+In both:
+  _ipps._tcp.local,_ipp._tcp.local
+
+--- TLS SNI ---
+
+Only in nextcloud-20260219_023519:
+  garm3.nextcloud.com
+
+Only in nextcloud-optout-20260219_060158:
+
+In both:
+  apps.nextcloud.com
+  garm2.nextcloud.com
+  github.com
+  nextcloud.com
+  pushfeed.nextcloud.com
+  raw.githubusercontent.com
+  updates.nextcloud.com
+  www.nextcloud.com
+
+--- Outbound IPs (non-RFC1918) ---
+
+Only in nextcloud-20260219_023519:
+  140.82.116.4
+  185.199.109.133
+  65.108.197.113
+
+Only in nextcloud-optout-20260219_060158:
+  140.82.116.3
+  185.199.110.133
+
+In both:
+  224.0.0.251
+  5.9.202.145
+  65.109.114.179
+  65.21.231.50
+  85.10.195.17
+
+--- Per-Phase Packet Counts ---
+
+Phase           nextcloud-20260219_023519 nextcloud-optout-20260219_060158
+-----           ------     ------    
+boot            64003      64473     
+idle            2726       2694      
+interaction     27079      26177     
+
+Comparison complete.

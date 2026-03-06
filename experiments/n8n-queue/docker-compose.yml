@@ -1,0 +1,119 @@
+# n8n - Queue Mode (Full Stack)
+# This runs n8n with PostgreSQL, Redis, and a separate worker process.
+# This is the "production" deployment recommended by n8n docs.
+# Compare against n8n-single/ to test the orchestration gap hypothesis.
+
+services:
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: mys-n8n-queue-main
+    restart: "no"
+    environment:
+      - N8N_HOST=0.0.0.0
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - N8N_SECURE_COOKIE=false
+      - WEBHOOK_URL=http://localhost:5678/
+      # PostgreSQL
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=n8n
+      - DB_POSTGRESDB_USER=n8n
+      - DB_POSTGRESDB_PASSWORD=n8n_research_pw
+      # Queue mode with Redis
+      - EXECUTIONS_MODE=queue
+      - QUEUE_BULL_REDIS_HOST=redis
+      - QUEUE_BULL_REDIS_PORT=6379
+      - N8N_ENCRYPTION_KEY=mys_research_encryption_key_2026
+    ports:
+      - "5678:5678"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:5678/healthz || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    dns:
+      - 172.30.0.2
+    networks:
+      - internal
+      - research-infra
+
+  n8n-worker:
+    image: n8nio/n8n:latest
+    container_name: mys-n8n-queue-worker
+    restart: "no"
+    command: worker
+    environment:
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=n8n
+      - DB_POSTGRESDB_USER=n8n
+      - DB_POSTGRESDB_PASSWORD=n8n_research_pw
+      - EXECUTIONS_MODE=queue
+      - QUEUE_BULL_REDIS_HOST=redis
+      - QUEUE_BULL_REDIS_PORT=6379
+      - N8N_ENCRYPTION_KEY=mys_research_encryption_key_2026
+    depends_on:
+      n8n:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    dns:
+      - 172.30.0.2
+    networks:
+      - internal
+      - research-infra
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: mys-n8n-queue-postgres
+    restart: "no"
+    environment:
+      - POSTGRES_DB=n8n
+      - POSTGRES_USER=n8n
+      - POSTGRES_PASSWORD=n8n_research_pw
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U n8n"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    dns:
+      - 172.30.0.2
+    networks:
+      - internal
+      - research-infra
+
+  redis:
+    image: redis:7-alpine
+    container_name: mys-n8n-queue-redis
+    restart: "no"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    dns:
+      - 172.30.0.2
+    networks:
+      - internal
+      - research-infra
+
+networks:
+  internal:
+    driver: bridge
+  research-infra:
+    external: true
+    name: mys-research-infra
+
+volumes:
+  postgres-data:

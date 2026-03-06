@@ -1,0 +1,97 @@
+# Immich - Full Stack (based on official docker-compose)
+# Includes: app server, machine learning, PostgreSQL, Redis
+# Instrumented: all services use CoreDNS for DNS resolution.
+#
+# IMPORTANT: Before running, create a .env file in this directory:
+#   echo "UPLOAD_LOCATION=./immich-uploads" > .env
+#   echo "DB_PASSWORD=immich_research_pw" >> .env
+#
+# Or just use the defaults below.
+
+services:
+  immich-server:
+    image: ghcr.io/immich-app/immich-server:release
+    container_name: mys-immich-server
+    restart: "no"
+    environment:
+      - DB_HOSTNAME=database
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=immich_research_pw
+      - DB_DATABASE_NAME=immich
+      - REDIS_HOSTNAME=redis
+    volumes:
+      - upload-data:/usr/src/app/upload
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "2283:2283"
+    depends_on:
+      database:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    dns:
+      - 172.30.0.2
+    networks:
+      - internal
+      - research-infra
+
+  immich-machine-learning:
+    image: ghcr.io/immich-app/immich-machine-learning:release
+    container_name: mys-immich-ml
+    restart: "no"
+    volumes:
+      - model-cache:/cache
+    dns:
+      - 172.30.0.2
+    networks:
+      - internal
+      - research-infra
+
+  database:
+    image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0
+    container_name: mys-immich-db
+    restart: "no"
+    environment:
+      - POSTGRES_PASSWORD=immich_research_pw
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=immich
+      - POSTGRES_INITDB_ARGS=--data-checksums
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d immich"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    dns:
+      - 172.30.0.2
+    networks:
+      - internal
+      - research-infra
+
+  redis:
+    image: docker.io/valkey/valkey:9-alpine
+    container_name: mys-immich-redis
+    restart: "no"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    dns:
+      - 172.30.0.2
+    networks:
+      - internal
+      - research-infra
+
+networks:
+  internal:
+    driver: bridge
+  research-infra:
+    external: true
+    name: mys-research-infra
+
+volumes:
+  upload-data:
+  model-cache:
+  pgdata:
