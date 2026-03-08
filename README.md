@@ -17,8 +17,8 @@ This repository is the public code and summary repo for a three-application case
 The project draws on four separate datasets:
 
 1. DockerGym baseline: 2-minute isolated image runs used as the short-window comparison point.
-2. Automated stack runs: boot, idle, and interaction captures for realistic solo and full-stack deployments.
-3. 72-hour manual capture: the separate dataset used for periodicity and fingerprint-window claims.
+2. Automated stack runs: boot, idle, and Playwright-standardized interaction captures for realistic solo and full-stack deployments.
+3. 72-hour manual capture: the separate passive-observation dataset used for periodicity and fingerprint-window claims, with occasional real user interaction rather than Playwright-driven interaction.
 4. Opt-out reruns: the final reruns used to evaluate telemetry suppression in the tested opt-out variants.
 
 For the public repo, the main references are:
@@ -37,7 +37,7 @@ In the automated comparison dataset, DockerGym's 2-minute baseline observed `0` 
 
 The three applications are useful for different reasons. For n8n, the clearest result is recurring telemetry timing rather than a solo-versus-stack domain gap. For Immich, the clearest result is the difference between the crashing solo setup and the full stack reaching `api.github.com`. For Nextcloud, the strongest orchestration result is the `+3` boot-phase stack-only domains.
 
-The periodicity and fingerprint-window claims come from the separate 72-hour manual-capture dataset. In the archived manual-capture materials, the observed fingerprint windows were `1 hour` for n8n, `4 hours` for Immich, and `24 hours` for Nextcloud. That dataset also has its own total of `10` unique TLS domains, which should be read separately from the automated comparison total of `12`.
+The periodicity and fingerprint-window claims come from the separate 72-hour manual-capture dataset, not from the Playwright-standardized automated interaction runs. In the archived manual-capture materials, the observed fingerprint windows were `1 hour` for n8n, `4 hours` for Immich, and `24 hours` for Nextcloud. That dataset also has its own total of `10` unique TLS domains, which should be read separately from the automated comparison total of `12`.
 
 For the tested opt-out variants, the final reruns in the curated summary showed `0` remaining TLS SNI domains.
 
@@ -74,15 +74,23 @@ Later 72-hour manual captures already showed drift from the same mutable tags, i
 
 - Docker and Docker Compose
 - `tcpdump`, `tshark`, `dig`, `jq`
-- Python 3 with Playwright for automated interaction
+- Python 3 with Playwright for the automated interaction workflow
 - Root access for packet capture
 
 ## Setup
+
+### Automated boot/idle/interaction workflow
 
 ```bash
 sudo apt install -y tcpdump tshark dnsutils jq
 pip install playwright
 playwright install --with-deps chromium
+```
+
+### 72-hour manual-capture workflow
+
+```bash
+sudo apt install -y tcpdump tshark dnsutils jq
 ```
 
 ## Usage
@@ -91,17 +99,19 @@ playwright install --with-deps chromium
 # Start DNS instrumentation
 cd infra && docker compose up -d
 
-# Run all automated experiments with the current script defaults:
+# Run all automated experiments with the current script defaults.
+# The interaction phase is standardized with Playwright:
 # boot 180s, idle 3600s, interaction 600s
 sudo bash scripts/run-all.sh
 
-# Run one experiment
+# Run one automated experiment with the Playwright interaction phase
 sudo bash scripts/run-experiment.sh n8n-single
 
 # Override phase durations
 sudo MYS_BOOT=60 MYS_IDLE=120 MYS_INTERACT=60 bash scripts/run-all.sh
 
-# Start a 72-hour manual capture dataset collection
+# Start a separate 72-hour manual-capture collection.
+# This workflow is long-running passive observation with occasional real user interaction.
 sudo bash scripts/run-manual-capture.sh nextcloud 72
 ```
 
