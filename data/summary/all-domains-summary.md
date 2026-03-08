@@ -12,7 +12,7 @@ For recovered versions and drift over time, see [`REPRODUCIBILITY.md`](../../REP
 
 ## DockerGym Baseline Comparison (2026-02-26)
 
-**Methodology:** Replicated DockerGym's exact approach (2-min `docker run -dit`, isolated network, tcpdump capture) on our target images.
+**Methodology:** Replicated DockerGym's exact approach (2-min `docker run -dit`, isolated network, tcpdump capture) on our target images and compared it against the historical automated comparison dataset's 65-minute full-stack window.
 
 ### TLS Connections: DockerGym vs Full Stack
 
@@ -24,6 +24,7 @@ For recovered versions and drift over time, see [`REPRODUCIBILITY.md`](../../REP
 | **Total** | **0** | **12** | **+12** |
 
 This `12`-domain total belongs to the automated comparison dataset, not the separate 72-hour capture dataset.
+Current `scripts/run-experiment.sh` defaults are `180s` boot, `3600s` idle, and `600s` interaction (`73 min` total), so reruns with the current script defaults use a longer window than this historical comparison table.
 
 ### DockerGym Baseline Details
 
