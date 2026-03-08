@@ -66,7 +66,7 @@ Later 72-hour manual captures already showed drift from the same mutable tags, i
 ├── experiments/             # Docker Compose configurations for the studied apps
 ├── infra/                   # CoreDNS instrumentation
 ├── data/summary/            # Curated automated-comparison and opt-out summaries
-├── docs/                    # Public-facing notes for dataset separation and scope
+├── MANUAL_CAPTURE_DATASET_NOTE.md  # Separate 72-hour dataset scope and caveats
 └── REPRODUCIBILITY.md       # Version recovery and reproducibility caveats
 ```
 
