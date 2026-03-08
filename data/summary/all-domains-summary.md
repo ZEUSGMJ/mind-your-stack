@@ -1,7 +1,12 @@
-# Mind Your Stack - External Domains Summary
+# Mind Your Stack - Automated Stack And Opt-Out TLS Summary
 
 Generated: Wed Feb 19 08:35:00 PM PST 2026
 Updated: Wed Feb 26 2026 (added DockerGym baseline comparison)
+
+This file is the main summary for the automated stack runs and the final opt-out reruns.
+For the separate 72-hour periodicity results, see [`MANUAL_CAPTURE_DATASET_NOTE.md`](../../MANUAL_CAPTURE_DATASET_NOTE.md).
+Domain claims in this file are based on TLS SNI. Raw DNS totals are included only as supporting context because CoreDNS logs can accumulate across experiments.
+For recovered versions and drift over time, see [`REPRODUCIBILITY.md`](../../REPRODUCIBILITY.md).
 
 ---
 
@@ -17,6 +22,8 @@ Updated: Wed Feb 26 2026 (added DockerGym baseline comparison)
 | immich | 0 | 1 | +1 (100% missed) |
 | nextcloud | 0 | 9 | +9 (100% missed) |
 | **Total** | **0** | **12** | **+12** |
+
+This `12`-domain total belongs to the automated comparison dataset, not the separate 72-hour capture dataset.
 
 ### DockerGym Baseline Details
 
@@ -77,6 +84,7 @@ Updated: Wed Feb 26 2026 (added DockerGym baseline comparison)
 
 | Domain | Phase | Count |
 |--------|-------|-------|
+| **(none)** | - | - |
 
 ## immich
 
@@ -116,11 +124,13 @@ Updated: Wed Feb 26 2026 (added DockerGym baseline comparison)
 
 | Domain | Phase | Count |
 |--------|-------|-------|
+| **(none)** | - | - |
 
 ## n8n-queue-optout-full
 
 | Domain | Phase | Count |
 |--------|-------|-------|
+| **(none)** | - | - |
 
 ## nextcloud-optout
 
@@ -128,7 +138,7 @@ Updated: Wed Feb 26 2026 (added DockerGym baseline comparison)
 |--------|-------|-------|
 | **(none)** | - | - |
 
-*Re-run on 2026-02-19 after fixing opt-out script (`su` -> `runuser`). Opt-out is 100% effective.*
+*After the opt-out script was fixed on 2026-02-19 (`su` -> `runuser`), the final rerun showed no TLS SNI domains.*
 
 
 ## Orchestration Gap Summary (Experiment B)
@@ -149,7 +159,7 @@ Updated: Wed Feb 26 2026 (added DockerGym baseline comparison)
 | n8n-queue-optout-full | 0 | No |
 | nextcloud-optout | 0 | No |
 
-*All opt-out mechanisms are 100% effective. No zombie connections detected.*
+*Across the tested opt-out variants, the final reruns showed 0 TLS SNI domains and no zombie connections.*
 
 ## Anomalies
 
@@ -158,4 +168,3 @@ Updated: Wed Feb 26 2026 (added DockerGym baseline comparison)
 WARNING: idle.pcap has zero packets
 WARNING: interaction.pcap has zero packets
 ```
-
