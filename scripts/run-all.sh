@@ -44,20 +44,6 @@ fi
 
 mkdir -p "$DATA"
 
-# Check for recent documentation validation
-VALIDATION_FILE="${RESEARCH_ROOT}/doc-validation/LAST-VALIDATION.md"
-if [[ -f "$VALIDATION_FILE" ]]; then
-    VALIDATION_AGE=$(( $(date +%s) - $(stat -c %Y "$VALIDATION_FILE") ))
-    DAYS_OLD=$(( VALIDATION_AGE / 86400 ))
-    if [[ $DAYS_OLD -gt 7 ]]; then
-        warn "Documentation validation is ${DAYS_OLD} days old. Consider re-validating."
-    else
-        log "Documentation validated ${DAYS_OLD} day(s) ago."
-    fi
-else
-    warn "No documentation validation found. Recommend validating compose files first."
-fi
-
 log "Mind Your Stack - Full Experiment Run (v2)"
 log "Started at: $(date)"
 log "Log file: ${LOGFILE}"
@@ -315,7 +301,7 @@ done
 log "Summary saved to: ${SUMMARY_FILE}"
 
 # ── Fix ownership ─────────────────────────────────────────────────
-REAL_USER="${SUDO_USER:-zeusgmj}"
+REAL_USER="${SUDO_USER:-$(logname 2>/dev/null || echo nobody)}"
 log "Fixing file ownership to ${REAL_USER}..."
 chown -R "${REAL_USER}:${REAL_USER}" "${DATA}/" || warn "Could not fix ownership."
 

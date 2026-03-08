@@ -51,9 +51,20 @@ Measuring outbound network behavior in self-hosted Docker applications to determ
 ## Requirements
 
 - Docker and Docker Compose
-- tcpdump, tshark
-- Python 3 with Playwright
+- tcpdump, tshark, dig, jq
+- Python 3 with Playwright (for interaction phase)
 - Root access (for packet capture)
+
+## Setup
+
+```bash
+# Install system dependencies
+sudo apt install -y tcpdump tshark dnsutils jq
+
+# Install Playwright for browser automation
+pip install playwright
+playwright install --with-deps chromium
+```
 
 ## Usage
 
@@ -61,11 +72,14 @@ Measuring outbound network behavior in self-hosted Docker applications to determ
 # Start DNS instrumentation
 cd infra && docker compose up -d
 
-# Run all experiments
+# Run all experiments (default: 3 min boot, 60 min idle, 10 min interaction)
 sudo ./scripts/run-all.sh
 
 # Or run a single experiment
 sudo ./scripts/run-experiment.sh n8n-single
+
+# Override phase durations (seconds)
+sudo MYS_BOOT=60 MYS_IDLE=120 MYS_INTERACT=60 ./scripts/run-all.sh
 ```
 
 ## Related Work
