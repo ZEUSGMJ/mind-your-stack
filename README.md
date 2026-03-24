@@ -62,12 +62,13 @@ Later 72-hour manual captures already showed drift from the same mutable tags, i
 ## Repository Structure
 
 ```text
-├── scripts/                 # Automation, analysis, and manual-capture helpers
-├── experiments/             # Docker Compose configurations for the studied apps
-├── infra/                   # CoreDNS instrumentation
-├── data/summary/            # Curated automated-comparison and opt-out summaries
-├── MANUAL_CAPTURE_DATASET_NOTE.md  # Separate 72-hour dataset scope and caveats
-└── REPRODUCIBILITY.md       # Version recovery and reproducibility caveats
+├── scripts/                         # Automation, analysis, and manual-capture helpers
+├── experiments/                     # Docker Compose configurations for the studied apps
+├── infra/                           # CoreDNS instrumentation
+├── paper/                           # Final paper (PDF) and presentation slides (PPTX)
+├── data/summary/                    # Curated automated-comparison and opt-out summaries
+├── MANUAL_CAPTURE_DATASET_NOTE.md   # Separate 72-hour dataset scope and caveats
+└── REPRODUCIBILITY.md               # Version recovery and reproducibility caveats
 ```
 
 ## Requirements
